@@ -29,6 +29,7 @@ namespace Repo2\QueryReactor\Tests;
 use Repo2\QueryBuilder\ExpressionInterface;
 use Repo2\QueryReactor\Query;
 use Repo2\QueryReactor\QueryReactor;
+use Repo2\QueryReactor\Controller;
 
 abstract class ControllerTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -37,12 +38,24 @@ abstract class ControllerTestCase extends \PHPUnit_Framework_TestCase
      */
     protected $reactor;
 
+    /**
+     * @param Controller $controller
+     * @return QueryReactor
+     */
+    protected function createReactor(Controller $controller)
+    {
+        return new QueryReactor(TestUtil::getDriver(), $controller);
+    }
+
+    /**
+     * @param array $params
+     * @return \Repo2\QueryReactor\Controller
+     */
+    abstract protected function createController(array $params);
+
     public function setUp()
     {
-        $this->reactor = new QueryReactor(
-            TestUtil::getDriver(),
-            $this->createController(TestUtil::getControllerParams())
-        );
+        $this->reactor = $this->createReactor($this->createController(TestUtil::getControllerParams()));
         $this->queryAwait(new Query\GenericQuery(Fixtures::getCreateTable()));
     }
 
@@ -52,12 +65,6 @@ abstract class ControllerTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $params
-     * @return \Repo2\QueryReactor\Controller
-     */
-    abstract protected function createController(array $params);
-
-    /**
      * @param Query $query
      */
     protected function queryAwait(Query $query)
@@ -65,9 +72,9 @@ abstract class ControllerTestCase extends \PHPUnit_Framework_TestCase
         $this->reactor->execQuery($query)->await();
     }
 
-    protected function getQueryMock(ExpressionInterface $expression)
+    protected function getQueryMock(ExpressionInterface $expression, $queryClass = '\Repo2\QueryReactor\Query')
     {
-        $mock = $this->getMock('\Repo2\QueryReactor\Query');
+        $mock = $this->getMock($queryClass);
 
         $mock->expects($this->once())
             ->method('getExpression')
@@ -118,8 +125,7 @@ abstract class ControllerTestCase extends \PHPUnit_Framework_TestCase
 
         $queries = new \ArrayObject([$queryX, $queryY]);
 
-        $this->reactor->execIterator($queries->getIterator());
-        $this->reactor->await();
+        $this->reactor->execIterator($queries->getIterator())->await();
     }
 
     public function testSelectWithQueryCascading()
