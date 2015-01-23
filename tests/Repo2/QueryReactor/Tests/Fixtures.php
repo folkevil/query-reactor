@@ -24,9 +24,40 @@
  * SOFTWARE.
  */
 
-error_reporting(E_ALL | E_STRICT);
-date_default_timezone_set('UTC');
-ini_set('display_errors', 1);
+namespace Repo2\QueryReactor\Tests;
 
-$loader = include __DIR__.'/../vendor/autoload.php';
-$loader->add('Repo2\\QueryReactor\\Tests\\', __DIR__);
+use Repo2\QueryBuilder;
+use Repo2\QueryBuilder\DDL;
+
+class Fixtures
+{
+    const TABLE_NAME = 'repo2_table';
+
+    public static function getCreateTable()
+    {
+        return DDL\create(self::TABLE_NAME, [
+            DDL\column('id')->integer()->primary(),
+            DDL\column('name')->varchar(50)->required()
+        ]);
+    }
+
+    public static function getDropTable()
+    {
+        return DDL\drop(self::TABLE_NAME);
+    }
+
+    public static function getInsert()
+    {
+        return QueryBuilder\insert(self::TABLE_NAME, ['id' => 1, 'name' => 'foo']);
+    }
+
+    public static function getSelect()
+    {
+        return QueryBuilder\select(self::TABLE_NAME, ['id', 'name']);
+    }
+
+    public static function getBadSyntax()
+    {
+        return QueryBuilder\assign('foo', 'bar');
+    }
+}

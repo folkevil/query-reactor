@@ -1,10 +1,14 @@
 {
     "name": "repo2/query-reactor",
     "type": "library",
+    "description": "Asynchronous & non-blocking MySQL queries executor.",
+    "keywords": ["sql", "query", "mysql", "async", "non-blocking"],
     "minimum-stability": "stable",
     "license": "MIT",
     "require": {
-        "php": ">=5.4"
+        "php": ">=5.4",
+        "psr/log": "*",
+        "repo2/query-builder": "*"
     },
     "autoload": {
         "psr-0": {

@@ -24,9 +24,24 @@
  * SOFTWARE.
  */
 
-error_reporting(E_ALL | E_STRICT);
-date_default_timezone_set('UTC');
-ini_set('display_errors', 1);
+namespace Repo2\QueryReactor;
 
-$loader = include __DIR__.'/../vendor/autoload.php';
-$loader->add('Repo2\\QueryReactor\\Tests\\', __DIR__);
+interface Query
+{
+    /**
+     * @param \Traversable $result
+     * @return mixed
+     */
+    public function resolve(\Traversable $result);
+
+    /**
+     * @param \Exception $err
+     * @return mixed
+     */
+    public function reject(\Exception $err);
+
+    /**
+     * @return \Repo2\QueryBuilder\ExpressionInterface
+     */
+    public function getExpression();
+}

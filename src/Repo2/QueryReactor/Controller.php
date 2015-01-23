@@ -24,9 +24,22 @@
  * SOFTWARE.
  */
 
-error_reporting(E_ALL | E_STRICT);
-date_default_timezone_set('UTC');
-ini_set('display_errors', 1);
+namespace Repo2\QueryReactor;
 
-$loader = include __DIR__.'/../vendor/autoload.php';
-$loader->add('Repo2\\QueryReactor\\Tests\\', __DIR__);
+interface Controller
+{
+    /**
+     * @param Driver $driver
+     * @param Query $query
+     * @return mixed
+     */
+    public function query(Driver $driver, Query $query);
+
+    /**
+     * @param Driver $driver
+     * @param mixed $link
+     * @return Query
+     * @throws \OutOfBoundsException
+     */
+    public function next(Driver $driver, $link);
+}

@@ -6,7 +6,17 @@ php:
   - 5.5
   - 5.6
 
-before_script:
+install:
   - composer install
+  - wget https://scrutinizer-ci.com/ocular.phar
 
-script: phpunit --configuration phpunit.xml --coverage-text
+env:
+  - DB=mysql
+
+before_script:
+  - if [[ "$DB" == "mysql" ]]; then mysql -e "CREATE DATABASE IF NOT EXISTS repo2_test;" -uroot; fi
+
+script: phpunit --configuration phpunit_$DB.xml --coverage-clover=coverage.clover
+
+after_script:
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover

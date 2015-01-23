@@ -24,9 +24,17 @@
  * SOFTWARE.
  */
 
-error_reporting(E_ALL | E_STRICT);
-date_default_timezone_set('UTC');
-ini_set('display_errors', 1);
+namespace Repo2\QueryReactor\Sharding;
 
-$loader = include __DIR__.'/../vendor/autoload.php';
-$loader->add('Repo2\\QueryReactor\\Tests\\', __DIR__);
+interface ShardedQuery
+{
+    /**
+     * @return string
+     */
+    public function getDistributionName();
+
+    /**
+     * @return int
+     */
+    public function getDistributionValue();
+}

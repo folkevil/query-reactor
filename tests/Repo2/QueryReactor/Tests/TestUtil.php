@@ -24,9 +24,41 @@
  * SOFTWARE.
  */
 
-error_reporting(E_ALL | E_STRICT);
-date_default_timezone_set('UTC');
-ini_set('display_errors', 1);
+namespace Repo2\QueryReactor\Tests;
 
-$loader = include __DIR__.'/../vendor/autoload.php';
-$loader->add('Repo2\\QueryReactor\\Tests\\', __DIR__);
+use Repo2\QueryReactor\Driver\Mysqli\MysqliDriver;
+use Psr\Log\NullLogger;
+
+class TestUtil
+{
+    public static function getDriver()
+    {
+        $type = getenv('REPO2_DB_TYPE');
+
+        if (!$type) {
+            die('Environment variable "REPO2_DB_TYPE" not defined.' . PHP_EOL);
+        }
+
+        switch ($type) {
+            case 'mysql':
+                return new MysqliDriver(new NullLogger());
+            default:
+                die(sprintf('The driver "%s" not supported.', $type) . PHP_EOL);
+        }
+    }
+
+    public static function getControllerParams()
+    {
+        return [
+            'host' => self::getenv('REPO2_DB_HOST', 'localhost'),
+            'dbname' => self::getenv('REPO2_DB_NAME', 'repo2_test'),
+            'username' => self::getenv('REPO2_DB_USERNAME', 'root'),
+            'passwd' => self::getenv('REPO2_DB_PASSWD', '')
+        ];
+    }
+
+    private static function getenv($name, $default)
+    {
+        return getenv($name) ?: $default;
+    }
+}

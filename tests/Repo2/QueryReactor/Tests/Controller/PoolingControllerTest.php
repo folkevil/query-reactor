@@ -24,9 +24,18 @@
  * SOFTWARE.
  */
 
-error_reporting(E_ALL | E_STRICT);
-date_default_timezone_set('UTC');
-ini_set('display_errors', 1);
+namespace Repo2\QueryReactor\Tests\Controller;
 
-$loader = include __DIR__.'/../vendor/autoload.php';
-$loader->add('Repo2\\QueryReactor\\Tests\\', __DIR__);
+use Repo2\QueryReactor\Tests\ControllerTestCase;
+use Repo2\QueryReactor\Controller\PoolingController;
+
+class PoolingControllerTest extends ControllerTestCase
+{
+    /**
+     * @inheritDoc
+     */
+    protected function createController(array $params)
+    {
+        return new PoolingController($params + ['max_connections' => 1]);
+    }
+}

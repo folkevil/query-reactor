@@ -24,9 +24,54 @@
  * SOFTWARE.
  */
 
-error_reporting(E_ALL | E_STRICT);
-date_default_timezone_set('UTC');
-ini_set('display_errors', 1);
+namespace Repo2\QueryReactor;
 
-$loader = include __DIR__.'/../vendor/autoload.php';
-$loader->add('Repo2\\QueryReactor\\Tests\\', __DIR__);
+use Repo2\QueryBuilder\ExpressionInterface;
+
+interface Driver
+{
+    /**
+     * @param array $params
+     * @param string $username
+     * @param string $passwd
+     * @return mixed
+     */
+    public function connect(array $params, $username, $passwd);
+
+    /**
+     * @param mixed $link
+     * @param ExpressionInterface $expr
+     * @throws Driver\DriverException
+     */
+    public function query($link, ExpressionInterface $expr);
+
+    /**
+     * @param mixed $link
+     * @return Driver\DriverException
+     */
+    public function error($link);
+
+    /**
+     * @param array $links
+     * @return array
+     * @throws Driver\DriverException
+     */
+    public function poll(array $links);
+
+    /**
+     * @param mixed $link
+     * @return string
+     */
+    public function info($link);
+
+    /**
+     * @param mixed $link
+     * @return mixed
+     */
+    public function getResult($link);
+
+    /**
+     * @param mixed $result
+     */
+    public function freeResult($result);
+}
