@@ -90,8 +90,8 @@ class ShardingController implements Controller
      */
     private function pickGlobal()
     {
-        if (empty($this->controller[0])) {
-            $this->controller[0] = new $this->controllerClass($this->sharding->selectGlobal());
+        if (empty($this->controllers[0])) {
+            $this->controllers[0] = new $this->controllerClass($this->sharding->selectGlobal());
         }
         return $this->controllers[0];
     }
