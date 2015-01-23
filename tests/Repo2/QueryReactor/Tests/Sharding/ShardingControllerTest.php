@@ -24,8 +24,21 @@
  * SOFTWARE.
  */
 
-namespace Repo2\QueryReactor\Sharding;
+namespace Repo2\QueryReactor\Tests\Sharding;
 
-class ShardingException extends \Exception
+use Repo2\QueryReactor\Tests\ControllerTestCase;
+use Repo2\QueryReactor\Sharding\ShardingController;
+
+class ShardingControllerTest extends ControllerTestCase
 {
+    protected function createController(array $params)
+    {
+        $sharding = $this->getMock('\Repo2\QueryReactor\Sharding\ShardingService');
+
+        $sharding->expects($this->once())
+            ->method('selectGlobal')
+            ->will($this->returnValue($params));
+
+        return new ShardingController($sharding, '\Repo2\QueryReactor\Controller\PoolingController');
+    }
 }

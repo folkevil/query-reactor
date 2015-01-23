@@ -161,6 +161,7 @@ class QueryReactor
 
     public function await()
     {
-        while ($this->poll()) {}
+        while ($this->poll()) {
+        }
     }
 }

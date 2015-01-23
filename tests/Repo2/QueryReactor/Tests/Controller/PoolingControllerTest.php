@@ -31,9 +31,6 @@ use Repo2\QueryReactor\Controller\PoolingController;
 
 class PoolingControllerTest extends ControllerTestCase
 {
-    /**
-     * @inheritDoc
-     */
     protected function createController(array $params)
     {
         return new PoolingController($params + ['max_connections' => 1]);

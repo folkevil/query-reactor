@@ -91,7 +91,7 @@ class PoolingController implements Controller
     public function next(Driver $driver, $link)
     {
         if (!isset($this->pool[$link])) {
-            throw new \OutOfBoundsException(sprintf('Undefined %s in pooling connection.', $driver->info($link)));
+            throw new \OutOfBoundsException(sprintf('Undefined %s in the pooling controller.', $driver->info($link)));
         }
         if (!$this->waiting->isEmpty()) {
             $query = $this->waiting->dequeue();

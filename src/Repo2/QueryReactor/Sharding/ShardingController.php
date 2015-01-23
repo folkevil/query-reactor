@@ -69,7 +69,7 @@ class ShardingController implements Controller
                 continue;
             }
         }
-        throw new \OutOfBoundsException(sprintf('Undefined %s in sharding connection.', $driver->info($link)));
+        throw new \OutOfBoundsException(sprintf('Undefined %s in the sharding controller.', $driver->info($link)));
     }
 
     /**
