@@ -38,6 +38,13 @@ class GenericQueryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expr, $query->getExpression());
     }
 
+    public function testResolveWithoutFulfill()
+    {
+        $query = new GenericQuery(Fixtures::getSelect());
+
+        $this->assertNull($query->resolve(new \ArrayObject()));
+    }
+
     public function testResolve()
     {
         $onFulfill = $this->getMock('\Repo2\QueryReactor\Tests\Stub');
@@ -73,18 +80,5 @@ class GenericQueryTest extends \PHPUnit_Framework_TestCase
         $query = new GenericQuery(Fixtures::getSelect(), null, $onReject);
 
         $this->assertNull($query->reject(new \Exception()));
-    }
-
-    public function testRejectWithReturn()
-    {
-        $onReject = $this->getMock('\Repo2\QueryReactor\Tests\Stub');
-
-        $onReject->expects($this->once())
-            ->method('__invoke')
-            ->will($this->returnValue('ILoveException'));
-
-        $query = new GenericQuery(Fixtures::getSelect(), null, $onReject);
-
-        $this->assertSame('ILoveException', $query->reject(new \Exception()));
     }
 }

@@ -36,7 +36,7 @@ interface Query
 
     /**
      * @param \Exception $err
-     * @return mixed
+     * @return void
      */
     public function reject(\Exception $err);
 

@@ -82,7 +82,7 @@ class GenericQuery implements Query
     public function reject(\Exception $err)
     {
         if ($this->onReject) {
-            return call_user_func($this->onReject, $err);
+            call_user_func($this->onReject, $err);
         }
     }
 }

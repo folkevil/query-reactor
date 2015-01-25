@@ -114,7 +114,7 @@ class QueryReactor
     {
         $error = $this->driver->error($link);
         $query = $this->free($link);
-        $this->exec($query->reject($error));
+        $query->reject($error);
     }
 
     /**

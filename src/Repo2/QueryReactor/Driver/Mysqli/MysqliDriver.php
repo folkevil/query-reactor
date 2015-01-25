@@ -65,7 +65,7 @@ class MysqliDriver implements Driver
             throw new MysqliException($link->connect_error, $link->connect_errno);
         }
         restore_error_handler();
-        $this->logger->debug(sprintf('Connected to the host %s.', $params['host']));
+        $this->logger->debug(sprintf('Connected to %s.', $this->info($link)));
         return $link;
     }
 
@@ -79,7 +79,7 @@ class MysqliDriver implements Driver
         if (false === $link->query($sql, MYSQLI_ASYNC)) {
             throw $this->error($link);
         }
-        $this->logger->debug(sprintf('Running %s', $sql));
+        $this->logger->debug(sprintf('Running %s on %s.', $sql, $this->info($link)));
     }
 
     /**
@@ -134,6 +134,6 @@ class MysqliDriver implements Driver
     public function info($link)
     {
         /* @var $link \mysqli */
-        return sprintf('thread %d on %s', $link->thread_id, $link->host_info);
+        return sprintf('%s (thread %d)', $link->host_info, $link->thread_id);
     }
 }
